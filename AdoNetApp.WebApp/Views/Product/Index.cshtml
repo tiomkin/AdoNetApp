@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Products</h1>
+</div>
+<p>@TempData["Message"]</p>
+<a class="btn btn-success" asp-action="Create">Add Product</a>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Weight</th>
+        <th>Height</th>
+        <th>Width</th>
+        <th>Length</th>
+        <th colspan="2">Manage</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Description</td>
+            <td>@product.Weight</td>
+            <td>@product.Height</td>
+            <td>@product.Width</td>
+            <td>@product.Length</td>
+            <td>
+                <a class="btn btn-success" title="Edit" asp-action="Edit" asp-route-productId="@product.Id">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
