@@ -71,4 +71,5 @@ namespace AdoNetApp.WebApp.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 		}
+	}
 }
