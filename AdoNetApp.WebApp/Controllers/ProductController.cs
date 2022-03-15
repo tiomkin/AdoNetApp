@@ -43,7 +43,7 @@ namespace AdoNetApp.WebApp.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_repository.AddProduct(product);
+				_repository.UpdateProduct(product.Id, product);
 				TempData["Message"] = "Product successfully added.";
 				return RedirectToAction("Index");
 			}
