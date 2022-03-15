@@ -45,7 +45,13 @@ namespace AdoNetApp.WebApp.DataAccess
 
 		public void UpdateOrder(int id, Order order)
 		{
-			throw new NotImplementedException();
+			var record = _dataSet.Tables[0].Rows.Find(id);
+
+			_ = record ?? throw new InvalidOperationException($"Can not find record by id {id}");
+
+			record["Status"] = order.Status;
+			_dataSet.Tables[0].AcceptChanges();
+			_adapter.Fill(_dataSet);
 		}
 
 		public Order GetOrderById(int id)
