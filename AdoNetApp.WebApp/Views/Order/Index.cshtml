@@ -4,42 +4,42 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Products</h1>
+    <h1 class="display-4">Orders</h1>
 </div>
 <p>@TempData["Message"]</p>
-<a class="btn btn-success" asp-action="Create">Add Product</a>
+<a class="btn btn-success" asp-action="Create">Add Order</a>
 <table class="table table-bordered table-striped">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Weight</th>
-        <th>Height</th>
-        <th>Width</th>
-        <th>Length</th>
+        <th>Id</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>Product Id</th>
         <th colspan="2">Manage</th>
     </tr>
     </thead>
     <tbody>
         @foreach (var order in Model)
         {
-        <tr>
-            <td>@order.Status</td>
-            <td>@order.CreatedDate</td>
-            <td>@order.UpdatedDate</td>
-            <td>@order.ProductId</td>
-            <td>
-                <a class="btn btn-success" title="Edit" asp-action="Edit" asp-route-orderId="@order.Id">
-                    Edit
-                </a>
-            </td>
-            <td>
-                <form asp-action="Delete" method="post">
-                    <input type="hidden" name="orderId" value="@order.Id" />
-                    <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
-                </form>
-            </td>
-        </tr>
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Status</td>
+                <td>@order.CreatedDate</td>
+                <td>@order.UpdatedDate</td>
+                <td>@order.ProductId</td>
+                <td>
+                    <a class="btn btn-success" title="Edit" asp-action="Edit" asp-route-orderId="@order.Id">
+                        Edit
+                    </a>
+                </td>
+                <td>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="orderId" value="@order.Id"/>
+                        <button type="submit" class="btn btn-danger" title="Delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
