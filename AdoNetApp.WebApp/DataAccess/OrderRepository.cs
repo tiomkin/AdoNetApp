@@ -104,7 +104,12 @@ namespace AdoNetApp.WebApp.DataAccess
 
 		public void DeleteOrderById(int id)
 		{
-			throw new NotImplementedException();
+			var record = _dataSet.Tables[0].AsEnumerable().FirstOrDefault(x => x.Field<int>("Id") == id);
+			_ = record ?? throw new InvalidOperationException($"Can not find record by id {id}");
+
+			_dataSet.Tables[0].Rows.Remove(record);
+			_dataSet.Tables[0].AcceptChanges();
+			_adapter.Fill(_dataSet);
 		}
 
 		private void FillAdapter()
