@@ -1,4 +1,5 @@
 ﻿using AdoNetApp.WebApp.DataAccess;
+using AdoNetApp.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,73 +21,54 @@ namespace AdoNetApp.WebApp.Controllers
 			return View(model);
 		}
 
-		// GET: OrderController/Details/5
-		public ActionResult Details(int id)
-		{
-			return View();
-		}
-
 		// GET: OrderController/Create
 		public ActionResult Create()
 		{
-			return View();
-		}
-
-		// POST: OrderController/Create
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+			ViewData["Title"] = "Create Order";
+			ViewData["AddOrEditButton"] = "Add";
+			return View("Edit", new Order());
 		}
 
 		// GET: OrderController/Edit/5
-		public ActionResult Edit(int id)
+		public ActionResult Edit(int orderId)
 		{
-			return View();
+			ViewData["Title"] = "Edit Order";
+			ViewData["AddOrEditButton"] = "Edit";
+			var model = _repository.GetOrderById(orderId);
+			return View(model);
 		}
 
 		// POST: OrderController/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
+		public ActionResult Edit(CreateOrder order)
 		{
-			try
+			if (ModelState.IsValid)
 			{
-				return RedirectToAction(nameof(Index));
+				_repository.AddOrder(order);
+				TempData["Message"] = "Order successfully added.";
+				return RedirectToAction("Index");
 			}
-			catch
-			{
-				return View();
-			}
-		}
 
-		// GET: OrderController/Delete/5
-		public ActionResult Delete(int id)
-		{
-			return View();
+			TempData["Message"] = "Something wrong happened. Try create order again.";
+			return RedirectToAction("Create");
 		}
 
 		// POST: OrderController/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
+		public ActionResult Delete(int orderId)
 		{
 			try
 			{
+				_repository.DeleteOrderById(orderId);
+				TempData["Message"] = "Order successfully deleted.";
 				return RedirectToAction(nameof(Index));
 			}
 			catch
 			{
-				return View();
+				TempData["Message"] = "Could not delete order.";
+				return RedirectToAction(nameof(Index));
 			}
 		}
-	}
 }
