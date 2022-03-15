@@ -40,7 +40,12 @@ namespace AdoNetApp.WebApp.DataAccess
 
 		public void AddOrder(Order order)
 		{
-			throw new NotImplementedException();
+			var record = _dataSet.Tables[0].NewRow();
+			record["CreatedDate"] = DateTime.Now;
+			record["Status"] = order.Status;
+			record["ProductId"] = order.ProductId;
+			_dataSet.Tables[0].Rows.Add(record);
+			_adapter.Fill(_dataSet);
 		}
 
 		public void UpdateOrder(int id, Order order)
