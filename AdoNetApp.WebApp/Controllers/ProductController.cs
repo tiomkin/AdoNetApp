@@ -23,8 +23,22 @@ namespace AdoNetApp.WebApp.Controllers
 		public ActionResult Create()
 		{
 			ViewData["Title"] = "Create Product";
-			ViewData["AddOrEditButton"] = "Add";
-			return View("Edit", new Product());
+			return View(new Product());
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(Product product)
+		{
+			if (ModelState.IsValid)
+			{
+				_repository.AddProduct(product);
+				TempData["Message"] = "Product successfully added.";
+				return RedirectToAction("Index");
+			}
+
+			TempData["Message"] = "Something wrong happened. Try add product again.";
+			return RedirectToAction("Create");
 		}
 
 		// GET: ProductController/Edit/5
@@ -44,11 +58,11 @@ namespace AdoNetApp.WebApp.Controllers
 			if (ModelState.IsValid)
 			{
 				_repository.UpdateProduct(product.Id, product);
-				TempData["Message"] = "Product successfully added.";
+				TempData["Message"] = "Product successfully edited.";
 				return RedirectToAction("Index");
 			}
 
-			TempData["Message"] = "Something wrong happened. Try create product again.";
+			TempData["Message"] = "Something wrong happened. Try edit product again.";
 			return RedirectToAction("Create");
 		}
 
