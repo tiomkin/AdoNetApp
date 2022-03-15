@@ -41,11 +41,11 @@ namespace AdoNetApp.WebApp.Controllers
 		// POST: OrderController/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(CreateOrder order)
+		public ActionResult Edit(Order order)
 		{
 			if (ModelState.IsValid)
 			{
-				_repository.AddOrder(order);
+				_repository.UpdateOrder(order.Id, order);
 				TempData["Message"] = "Order successfully added.";
 				return RedirectToAction("Index");
 			}
