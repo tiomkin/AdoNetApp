@@ -44,11 +44,8 @@ namespace AdoNetApp.WebApp.DataAccess
 			record["ProductId"] = order.ProductId;
 			_dataSet.Tables[0].Rows.Add(record);
 			_dataSet.Tables[0].AcceptChanges();
-
-			using (Connection)
-			{
-				_adapter.Fill(_dataSet);
-			}
+			_dataSet.AcceptChanges();
+			_adapter.Update(_dataSet);
 		}
 
 		public void UpdateOrder(int id, Order order)
@@ -60,7 +57,7 @@ namespace AdoNetApp.WebApp.DataAccess
 			record["Status"] = order.Status;
 			record["UpdatedDate"] = DateTime.Now;
 			_dataSet.Tables[0].AcceptChanges();
-
+			_dataSet.AcceptChanges();
 			_adapter.Update(_dataSet);
 		}
 
@@ -75,7 +72,7 @@ namespace AdoNetApp.WebApp.DataAccess
 					Id = (int) record["Id"],
 					Status = record["Status"].ToString(),
 					CreatedDate = (DateTime) record["CreatedDate"],
-					UpdatedDate = (DateTime) record["UpdatedDate"],
+					UpdatedDate = DateTime.TryParse(record["UpdatedDate"].ToString(), out var updatedDate) ? updatedDate : null,
 					ProductId = (int) record["ProductId"]
 				};
 
@@ -95,8 +92,9 @@ namespace AdoNetApp.WebApp.DataAccess
 				var order = new Order()
 				{
 					Id = (int) record["Id"],
+					Status = record["Status"].ToString(),
 					CreatedDate = (DateTime) record["CreatedDate"],
-					UpdatedDate = (DateTime) record["UpdatedDate"],
+					UpdatedDate = DateTime.TryParse(record["UpdatedDate"].ToString(), out var updatedDate) ? updatedDate : null,
 					ProductId = (int) record["ProductId"]
 				};
 
@@ -113,11 +111,8 @@ namespace AdoNetApp.WebApp.DataAccess
 
 			_dataSet.Tables[0].Rows.Remove(record);
 			_dataSet.Tables[0].AcceptChanges();
-
-			using (Connection)
-			{
-				_adapter.Fill(_dataSet);
-			}
+			_dataSet.AcceptChanges();
+			_adapter.Update(_dataSet);
 		}
 
 		private void FillAdapter()
