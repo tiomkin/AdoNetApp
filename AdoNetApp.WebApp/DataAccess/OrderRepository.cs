@@ -11,14 +11,13 @@ namespace AdoNetApp.WebApp.DataAccess
 	public class OrderRepository : IOrderRepository
 	{
 		private SqlConnection _connection;
-		private readonly IConfiguration _configuration;
+		private readonly string _connectionString;
 		private SqlDataAdapter _adapter;
-		private SqlCommandBuilder _commandBuilder;
 		private DataSet _dataSet;
 
 		public OrderRepository(IConfiguration configuration)
 		{
-			_configuration = configuration;
+			_connectionString = configuration.GetConnectionString("Database");
 			FillAdapter();
 		}
 
@@ -28,8 +27,7 @@ namespace AdoNetApp.WebApp.DataAccess
 			{
 				if (_connection is null || _connection.State is ConnectionState.Closed or ConnectionState.Broken)
 				{
-					var connectionString = _configuration.GetConnectionString("Database");
-					_connection = new SqlConnection(connectionString);
+					_connection = new SqlConnection(_connectionString);
 					_connection.Open();
 					return _connection;
 				}
@@ -45,7 +43,12 @@ namespace AdoNetApp.WebApp.DataAccess
 			record["Status"] = order.Status;
 			record["ProductId"] = order.ProductId;
 			_dataSet.Tables[0].Rows.Add(record);
-			_adapter.Fill(_dataSet);
+			_dataSet.Tables[0].AcceptChanges();
+
+			using (Connection)
+			{
+				_adapter.Fill(_dataSet);
+			}
 		}
 
 		public void UpdateOrder(int id, Order order)
@@ -57,7 +60,8 @@ namespace AdoNetApp.WebApp.DataAccess
 			record["Status"] = order.Status;
 			record["UpdatedDate"] = DateTime.Now;
 			_dataSet.Tables[0].AcceptChanges();
-			_adapter.Fill(_dataSet);
+
+			_adapter.Update(_dataSet);
 		}
 
 		public Order GetOrderById(int id)
@@ -109,7 +113,11 @@ namespace AdoNetApp.WebApp.DataAccess
 
 			_dataSet.Tables[0].Rows.Remove(record);
 			_dataSet.Tables[0].AcceptChanges();
-			_adapter.Fill(_dataSet);
+
+			using (Connection)
+			{
+				_adapter.Fill(_dataSet);
+			}
 		}
 
 		private void FillAdapter()
@@ -118,6 +126,7 @@ namespace AdoNetApp.WebApp.DataAccess
 			using (Connection)
 			{
 				_adapter = new SqlDataAdapter(sql, Connection);
+				_adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
 				_dataSet = new DataSet();
 				_adapter.Fill(_dataSet);
 			}
