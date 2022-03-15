@@ -64,7 +64,7 @@ namespace AdoNetApp.WebApp.Controllers
 			}
 
 			TempData["Message"] = "Something wrong happened. Try edit order again.";
-			return RedirectToAction("Create");
+			return RedirectToAction("Index");
 		}
 
 		// POST: OrderController/Delete/5
