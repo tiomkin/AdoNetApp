@@ -50,6 +50,7 @@ namespace AdoNetApp.WebApp.DataAccess
 			_ = record ?? throw new InvalidOperationException($"Can not find record by id {id}");
 
 			record["Status"] = order.Status;
+			record["UpdatedDate"] = DateTime.Now;
 			_dataSet.Tables[0].AcceptChanges();
 			_adapter.Fill(_dataSet);
 		}
