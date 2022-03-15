@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace AdoNetApp.WebApp.DataAccess
@@ -49,7 +50,23 @@ namespace AdoNetApp.WebApp.DataAccess
 
 		public Order GetOrderById(int id)
 		{
-			throw new NotImplementedException();
+			var record = _dataSet.Tables[0].AsEnumerable().FirstOrDefault(x => x.Field<int>("Id") == id);
+
+			if (record != null)
+			{
+				var order = new Order()
+				{
+					Id = (int) record["Id"],
+					Status = record["Status"].ToString(),
+					CreatedDate = (DateTime) record["CreatedDate"],
+					UpdatedDate = (DateTime) record["UpdatedDate"],
+					ProductId = (int) record["ProductId"]
+				};
+
+				return order;
+			}
+
+			return null;
 		}
 
 		public IEnumerable<Order> GetAllOrders()
