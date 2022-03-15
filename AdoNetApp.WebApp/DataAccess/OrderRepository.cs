@@ -27,7 +27,8 @@ namespace AdoNetApp.WebApp.DataAccess
 			{
 				if (_connection is null || _connection.State is ConnectionState.Closed or ConnectionState.Broken)
 				{
-					_connection = new SqlConnection(_configuration.GetConnectionString("Database"));
+					var connectionString = _configuration.GetConnectionString("Database");
+					_connection = new SqlConnection(connectionString);
 					_connection.Open();
 					return _connection;
 				}
@@ -79,12 +80,12 @@ namespace AdoNetApp.WebApp.DataAccess
 
 		private void FillAdapter()
 		{
-			var sql = "SELECT * FROM dbo.Order";
+			var sql = "SELECT * FROM [dbo].[Order]";
 			using (Connection)
 			{
 				_adapter = new SqlDataAdapter(sql, Connection);
 				_dataSet = new DataSet();
-				_adapter.Fill(_dataSet, "Order");
+				_adapter.Fill(_dataSet);
 			}
 		}
 	}
