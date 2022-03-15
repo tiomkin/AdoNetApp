@@ -38,7 +38,7 @@ namespace AdoNetApp.WebApp.DataAccess
 			}
 		}
 
-		public void AddOrder(Order order)
+		public void AddOrder(CreateOrder order)
 		{
 			var record = _dataSet.Tables[0].NewRow();
 			record["CreatedDate"] = DateTime.Now;
