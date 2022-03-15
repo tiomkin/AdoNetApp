@@ -1,0 +1,21 @@
+﻿@model CreateOrder
+<h1>@ViewData["Title"]</h1>
+<p>@TempData["Message"]</p>
+<form asp-action="Create" asp-controller="Order" method="post">
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <div>
+            <span class="text-danger" asp-validation-for="Status"></span>
+        </div>
+        <input class="form-control" type="text" asp-for="Status" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ProductId"></label>
+        <div>
+            <span class="text-danger" asp-validation-for="ProductId"></span>
+        </div>
+        <input class="form-control" type="text" asp-for="ProductId" />
+    </div>
+    <button class="btn btn-success" type="submit" asp-action="Create">Create</button>
+    <a asp-action="Index" class="btn btn-primary">Cancel</a>
+</form>
