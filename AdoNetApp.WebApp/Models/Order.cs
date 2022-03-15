@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using AdoNetApp.WebApp.Attributes;
+using AdoNetApp.WebApp.Enums;
 
 namespace AdoNetApp.WebApp.Models
 {
@@ -10,6 +12,7 @@ namespace AdoNetApp.WebApp.Models
 
 		[Required]
 		[StringLength(50)]
+		[StringRange(EnumType = typeof(Status), ErrorMessage = "Status should be just of specific values")]
 		public string Status { get; set; }
 
 		public DateTime CreatedDate { get; set; }
