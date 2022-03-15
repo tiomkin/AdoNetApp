@@ -25,8 +25,22 @@ namespace AdoNetApp.WebApp.Controllers
 		public ActionResult Create()
 		{
 			ViewData["Title"] = "Create Order";
-			ViewData["AddOrEditButton"] = "Add";
-			return View("Edit", new Order());
+			return View( new CreateOrder());
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(CreateOrder order)
+		{
+			if (ModelState.IsValid)
+			{
+				_repository.AddOrder(order);
+				TempData["Message"] = "Product successfully added.";
+				return RedirectToAction("Index");
+			}
+
+			TempData["Message"] = "Something wrong happened. Try add product again.";
+			return RedirectToAction("Create");
 		}
 
 		// GET: OrderController/Edit/5
