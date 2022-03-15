@@ -25,7 +25,7 @@ namespace AdoNetApp.WebApp
 		{
 			services.AddControllersWithViews();
 			services.AddScoped<IProductRepository, ProductRepository>();
-			services.AddScoped<IOrderRepository, OrderRepository>();
+			services.AddSingleton<IOrderRepository, OrderRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
