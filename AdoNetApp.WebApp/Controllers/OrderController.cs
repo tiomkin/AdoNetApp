@@ -47,7 +47,6 @@ namespace AdoNetApp.WebApp.Controllers
 		public ActionResult Edit(int orderId)
 		{
 			ViewData["Title"] = "Edit Order";
-			ViewData["AddOrEditButton"] = "Edit";
 			var model = _repository.GetOrderById(orderId);
 			return View(model);
 		}
@@ -60,11 +59,11 @@ namespace AdoNetApp.WebApp.Controllers
 			if (ModelState.IsValid)
 			{
 				_repository.UpdateOrder(order.Id, order);
-				TempData["Message"] = "Order successfully added.";
+				TempData["Message"] = "Order successfully edited.";
 				return RedirectToAction("Index");
 			}
 
-			TempData["Message"] = "Something wrong happened. Try create order again.";
+			TempData["Message"] = "Something wrong happened. Try edit order again.";
 			return RedirectToAction("Create");
 		}
 
